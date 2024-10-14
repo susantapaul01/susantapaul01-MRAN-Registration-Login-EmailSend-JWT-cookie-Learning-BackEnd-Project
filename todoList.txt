@@ -1,0 +1,18 @@
+1. Folder & File Structure
+2. install dependencies             OK
+3. File >>
+    a) model: userModel.js > controller: userController.js > router: api.js
+        >> Get ready Postman URL
+    b) config: config.js or .env
+    c) index.js && mongoose connection
+4. registration
+5. login
+6. profile-read & profile update
+7. logout
+8. sendemail
+9. verify_email
+10. verify_OTP using email & otp params
+11. ResetPassword using email & otp params
+12. 
+
+
