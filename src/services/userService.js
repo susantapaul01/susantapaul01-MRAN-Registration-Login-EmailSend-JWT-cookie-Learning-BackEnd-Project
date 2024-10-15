@@ -1,20 +1,34 @@
-import userModel from "../models/userModel.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
-export const RegistrationService = async (req, res) => {
+// === Get __filename and __dirname ===
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+export const uploadMultipleFileService = async (req, res) => {
     try {
-        let data = req.body;
-        let email = data.email;
-            data.password = md5(req.body['password']);
-        let user = await userModel.find({ 'email': email });
-        if(user.length> 0) {
-            return res.status(409).json({ status: "error", messege: "already Registered"})
+        if(!req.files || Object.keys(req.files).length === 0) {
+            // console.log("Empty file.")
+            return res.status(400).json({ status: 'file', messege: "Empty file." });
         }
-        else {
-            let result = await userModel.create(data)
-            return res.status(200).json({ status: "success", messege: "Registration Successful", data: result });
+        let selectMultipleFile = req.files.file;
+        if(selectMultipleFile.length === undefined) {
+            console.log("At least 2 file are required.");
+            return res.status(400).json({ status: 'file', messege: "At least 2 file are required." });
         }
+        for(let i=0; i<selectMultipleFile.length; i++) {
+            const multipleFilePath = path.join(__dirname, "../../uploadedFile", Date.now()+"_"+selectMultipleFile[i].name);
+            // console.log(multipleFilePath)
+            await selectMultipleFile[i].mv(multipleFilePath, async (err) => {
+                if(err) {
+                    return res.status(500).json({ status: "error", messege: err.toString()});
+                }
+            })
+        }
+        return res.status(201).json({ status: true, messege: "Multiple File uploaded successfully!"});
     }
     catch(e) {
-        return res.json({ status: "success", messege: e.toString() })
+        return res.status(401).json({ status: false, messege: e.toString() });
     }
 }

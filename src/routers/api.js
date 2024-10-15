@@ -18,6 +18,8 @@ router.post('/verify_OTP/:email/:otp', UserController.VerifyOTP);
 router.post('/ResetPassword/:email/:otp', UserController.ResetPassword);
 router.post('/create-cart-list', authMiddleware, ProductController.createCart);                 // user Cart
 router.post('/upload-single-file', authMiddleware, userFileController.uploadSingleFile);        // user single file Upload
+router.get('/read-file', authMiddleware, userFileController.getUploadedFile);
+router.post('/delete-profile-image', authMiddleware, userFileController.deleteSingleImage);
 
 
 // user multiple file Upload
